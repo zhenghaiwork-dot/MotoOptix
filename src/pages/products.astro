@@ -16,7 +16,7 @@ const products = await getProducts();
       <div class="filter-row" data-filter-group="power"><b>Power format</b><button type="button" class="is-active" data-filter="all">All</button><button type="button" data-filter="hardwired">Hardwired / ACC</button><button type="button" data-filter="usb">USB powered</button><button type="button" data-filter="battery">Battery powered</button></div>
       <div class="filter-row" data-filter-group="feature"><b>Key feature</b><button type="button" class="is-active" data-filter="all">All</button><button type="button" data-filter="wifi">Wi-Fi</button><button type="button" data-filter="gps">GPS</button><button type="button" data-filter="carplay">CarPlay</button><button type="button" data-filter="tpms">TPMS</button></div>
     </div>
-    <div class="catalog-toolbar"><p><b>Product platforms</b><span>Supplier-listed data · verify selected samples before quotation</span></p><span>Compare configurations on each product page</span></div>
+    <div class="catalog-toolbar"><p><b>Product platforms</b><span>Supplier-listed data · verify selected samples before quotation</span></p><a class="catalog-compare-link" href="/compare/">Open comparison tool →</a></div>
     <div class="catalog-grid">
       {products.map((p) => {
         return <article id={p.id} class="catalog-card" data-product-item data-category={p.category} data-channels={p.channels} data-power={p.powerFormat} data-features={p.features.join(' ')} data-search={`${p.name} ${p.code} ${p.type} ${p.highlights.join(' ')}`.toLowerCase()}>

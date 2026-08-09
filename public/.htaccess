@@ -1,0 +1,2 @@
+# Standard public sitemap URL. Astro generates the sitemap index file.
+Redirect 301 /sitemap.xml /sitemap-index.xml

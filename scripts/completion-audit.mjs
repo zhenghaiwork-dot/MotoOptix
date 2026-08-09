@@ -26,6 +26,8 @@ for (const route of requiredRoutes) pass(existsSync(join(dist, route, 'index.htm
 pass(existsSync(join(dist, '404.html')), 'Missing 404 page');
 pass(existsSync(join(dist, 'robots.txt')), 'Missing robots.txt');
 pass(existsSync(join(dist, 'sitemap-index.xml')), 'Missing sitemap index');
+pass(existsSync(join(dist, '.htaccess')), 'Missing Apache sitemap redirect configuration');
+pass(readFileSync(join(dist, '.htaccess'), 'utf8').includes('sitemap.xml'), 'Standard sitemap.xml redirect is missing');
 pass(existsSync(join(dist, 'og.png')), 'Missing social preview image');
 
 const layout = read('src/layouts/BaseLayout.astro');

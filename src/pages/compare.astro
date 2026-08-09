@@ -10,7 +10,19 @@ const products = await getProducts();
 <BaseLayout title="Compare Motorcycle DVR & Smart Display Platforms" description="Compare MotoOptix motorcycle DVR and smart display platforms by use case, supply status, options and verification questions." breadcrumbs={crumbs}>
   <script is:inline type="application/ld+json" set:html={JSON.stringify(collectionPageSchema(crumbs, base, comparisonGuides.map(item => ({ name: item.title, url: `/compare/${item.id}/`, description: item.description }))))}></script>
   <section class="page-hero"><p class="kicker dark"><span></span> Compare the platform before the promise</p><h1>Compare Motorcycle DVR<br /><em>& Smart Display Platforms.</em></h1><p>Choose up to three reference platforms. This tool compares commercial and evaluation factors; final specifications remain tied to the selected sample configuration.</p></section>
-  <section class="compare-tool" data-compare-tool><div class="compare-picker"><p>SELECT UP TO THREE PLATFORMS</p>{products.map((product, index) => <label><input type="checkbox" value={product.id} checked={index < 2} /><span>{product.name}</span></label>)}</div><div class="compare-note">No fixed claims for unverified resolution, IP rating, brightness or certifications are shown here. Confirm them against the chosen supplier sample.</div><div class="compare-table"><div class="compare-row compare-head"><span>Evaluation factor</span>{products.map(product => <strong data-product={product.id}>{product.name}</strong>)}</div><div class="compare-row"><span>Platform type</span>{products.map(product => <p data-product={product.id}>{product.type}</p>)}</div><div class="compare-row"><span>Best-fit buyers</span>{products.map(product => <p data-product={product.id}>{product.idealFor.join(' · ')}</p>)}</div><div class="compare-row"><span>Configuration direction</span>{products.map(product => <p data-product={product.id}>{product.options.slice(0, 3).join(' · ')}</p>)}</div><div class="compare-row"><span>Verify before quote</span>{products.map(product => <p data-product={product.id}>{product.verification.slice(0, 3).join(' · ')}</p>)}</div><div class="compare-row"><span>Reference status</span>{products.map(product => <p data-product={product.id}>{product.status}</p>)}</div></div><div class="compare-actions"><a class="button button-accent" href="/contact/?intent=sample">Request a comparison sample <span>↗</span></a><a href="/requirements/">Review technical requirements →</a></div></section>
+  <section class="compare-tool" data-compare-tool>
+    <div class="compare-picker"><div><p>SELECT UP TO THREE PLATFORMS</p><span data-compare-count>2 selected</span></div>{products.map((product, index) => <label class:list={{ 'is-selected': index < 2 }}><input type="checkbox" value={product.id} checked={index < 2} /><span>{product.name}</span></label>)}</div>
+    <div class="compare-note"><b>Reference-platform comparison</b><span>No fixed claims for unverified resolution, IP rating, brightness or certifications are shown here. Confirm them against the chosen supplier sample.</span></div>
+    <div class="compare-table" role="table" aria-label="Selected motorcycle camera product comparison">
+      <div class="compare-row compare-head" role="row"><span role="columnheader">Evaluation factor</span>{products.map(product => <strong class="compare-product-head" data-product={product.id} role="columnheader"><img src={`/product-images/${product.id}.webp`} alt="" width="76" height="76" loading="lazy" /><span><small>{product.code}</small><b>{product.name}</b><em>{product.type}</em><a href={`/products/${product.id}/`}>View product →</a></span></strong>)}</div>
+      <div class="compare-row" role="row"><span role="rowheader">Platform type</span>{products.map(product => <p data-product={product.id} role="cell">{product.type}</p>)}</div>
+      <div class="compare-row" role="row"><span role="rowheader">Best-fit buyers</span>{products.map(product => <p data-product={product.id} role="cell">{product.idealFor.join(' · ')}</p>)}</div>
+      <div class="compare-row" role="row"><span role="rowheader">Configuration direction</span>{products.map(product => <p data-product={product.id} role="cell">{product.options.slice(0, 3).join(' · ')}</p>)}</div>
+      <div class="compare-row compare-verification-row" role="row"><span role="rowheader">Verify before quote</span>{products.map(product => <p data-product={product.id} role="cell">{product.verification.slice(0, 3).join(' · ')}</p>)}</div>
+      <div class="compare-row" role="row"><span role="rowheader">Reference status</span>{products.map(product => <p data-product={product.id} role="cell"><mark>{product.evidenceStage.replace('-', ' ')}</mark><small>{product.status}</small></p>)}</div>
+    </div>
+    <div class="compare-actions"><a class="button button-accent" href="/contact/?intent=sample">Request a comparison sample <span>↗</span></a><a href="/requirements/">Review technical requirements →</a></div>
+  </section>
   <section class="compare-guides section"><div class="section-heading"><p class="kicker dark"><span></span> Comparison guides</p><h2>Need a buying answer,<br />not just a table?</h2></div><div class="resource-stack">{comparisonGuides.map((guide, index) => <a href={`/compare/${guide.id}/`}><span>0{index + 1} · COMPARISON GUIDE</span><h3>{guide.title}</h3><b>↗</b></a>)}</div></section>
   <script is:inline>
     const compareTool = document.querySelector('[data-compare-tool]');
@@ -19,8 +31,15 @@ const products = await getProducts();
       const selected = compareInputs.filter(input => input.checked).map(input => input.value);
       compareTool?.querySelectorAll('[data-product]').forEach(cell => cell.hidden = !selected.includes(cell.dataset.product));
       compareInputs.forEach(input => input.disabled = !input.checked && selected.length >= 3);
+      compareInputs.forEach(input => input.closest('label')?.classList.toggle('is-selected', input.checked));
+      compareTool?.style.setProperty('--compare-count', String(Math.max(selected.length, 1)));
+      const count = compareTool?.querySelector('[data-compare-count]');
+      if (count) count.textContent = `${selected.length} selected`;
     };
-    compareInputs.forEach(input => input.addEventListener('change', setCompare));
+    compareInputs.forEach(input => input.addEventListener('change', () => {
+      if (!compareInputs.some(item => item.checked)) input.checked = true;
+      setCompare();
+    }));
     setCompare();
   </script>
 </BaseLayout>

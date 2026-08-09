@@ -3,7 +3,7 @@
 ## Quick commands
 
 ```sh
-pnpm install                          # pnpm@11.16.0 required; Node 22.22.2 (engines: >=22.12.0 <25)
+pnpm install                          # pnpm@11.20.0 required; Node 22.22.2 (engines: >=22.12.0 <25)
 pnpm dev                              # astro dev
 pnpm build                            # astro build → dist/
 pnpm run check                        # astro check (type-check)

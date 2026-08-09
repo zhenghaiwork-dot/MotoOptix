@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { solutions } from '../data/site';
+import { collectionPageSchema } from '../lib/schema';
+const base = Astro.site?.href || Astro.url.origin;
+const crumbs = [{ name: 'Home', url: '/' }, { name: 'Solutions', url: '/solutions/' }];
+---
+<BaseLayout title="Wholesale Solutions" description="Wholesale sourcing solutions for motorcycle accessory distributors, installers and local fleets." breadcrumbs={crumbs}>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(collectionPageSchema(crumbs, base, solutions.map(item => ({ name: item.title, url: `/solutions/${item.id}/`, description: item.summary }))))}></script>
+  <section class="page-hero"><p class="kicker dark"><span></span> Hardware sourcing around the buying job</p><h1>Motorcycle Camera Sourcing Solutions<br /><em>for Trade Buyers.</em></h1><p>Different buyers need different evidence. We organize product selection, samples and documentation around how you plan to sell or deploy.</p></section>
+  <section class="solution-list">{solutions.map((s, i) => <article id={s.id}><span>0{i+1}</span><div><small>{s.eyebrow}</small><h2>{s.title}</h2></div><ul>{s.priorities.map(x => <li>{x}</li>)}</ul><a href={`/solutions/${s.id}/`}>Review solution ↗</a></article>)}</section>
+</BaseLayout>

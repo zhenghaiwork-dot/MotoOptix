@@ -1,0 +1,13 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { collectionPageSchema } from '../lib/schema';
+const resources = (await getCollection('resources')).sort((a, b) => Number(b.data.featured) - Number(a.data.featured));
+const base = Astro.site?.href || Astro.url.origin;
+const crumbs = [{ name: 'Home', url: '/' }, { name: 'Resources', url: '/resources/' }];
+---
+<BaseLayout title="Motorcycle Dash Cam Buyer Resources" description="Technical and sourcing guides for motorcycle camera distributors, installers and brand owners." breadcrumbs={crumbs}>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(collectionPageSchema(crumbs, base, resources.map(item => ({ name: item.data.title, url: `/resources/${item.id}/`, description: item.data.description }))))}></script>
+  <section class="page-hero"><p class="kicker dark"><span></span> Make the specification do the selling</p><h1>Motorcycle Dash Cam Buyer Guides<br /><em>& Technical Resources.</em></h1><p>Clear, cautious technical content for buyers who need to compare products—not recycle factory adjectives.</p></section>
+  <section class="resource-grid">{resources.map((resource, i) => <article><span>0{i+1}</span><small>{resource.data.category.toUpperCase()} · {resource.data.readingTime.toUpperCase()}</small><h2><a href={`/resources/${resource.id}/`}>{resource.data.title}</a></h2><p>{resource.data.description}</p><a href={`/resources/${resource.id}/`}>Read guide →</a></article>)}</section>
+</BaseLayout>

@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { comparisonGuides } from '../data/site';
+import { getProducts } from '../lib/products';
+import { collectionPageSchema } from '../lib/schema';
+const base = Astro.site?.href || Astro.url.origin;
+const crumbs = [{ name: 'Home', url: '/' }, { name: 'Compare', url: '/compare/' }];
+const products = await getProducts();
+---
+<BaseLayout title="Compare Motorcycle DVR & Smart Display Platforms" description="Compare MotoOptix motorcycle DVR and smart display platforms by use case, supply status, options and verification questions." breadcrumbs={crumbs}>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(collectionPageSchema(crumbs, base, comparisonGuides.map(item => ({ name: item.title, url: `/compare/${item.id}/`, description: item.description }))))}></script>
+  <section class="page-hero"><p class="kicker dark"><span></span> Compare the platform before the promise</p><h1>Compare Motorcycle DVR<br /><em>& Smart Display Platforms.</em></h1><p>Choose up to three reference platforms. This tool compares commercial and evaluation factors; final specifications remain tied to the selected sample configuration.</p></section>
+  <section class="compare-tool" data-compare-tool><div class="compare-picker"><p>SELECT UP TO THREE PLATFORMS</p>{products.map((product, index) => <label><input type="checkbox" value={product.id} checked={index < 2} /><span>{product.name}</span></label>)}</div><div class="compare-note">No fixed claims for unverified resolution, IP rating, brightness or certifications are shown here. Confirm them against the chosen supplier sample.</div><div class="compare-table"><div class="compare-row compare-head"><span>Evaluation factor</span>{products.map(product => <strong data-product={product.id}>{product.name}</strong>)}</div><div class="compare-row"><span>Platform type</span>{products.map(product => <p data-product={product.id}>{product.type}</p>)}</div><div class="compare-row"><span>Best-fit buyers</span>{products.map(product => <p data-product={product.id}>{product.idealFor.join(' · ')}</p>)}</div><div class="compare-row"><span>Configuration direction</span>{products.map(product => <p data-product={product.id}>{product.options.slice(0, 3).join(' · ')}</p>)}</div><div class="compare-row"><span>Verify before quote</span>{products.map(product => <p data-product={product.id}>{product.verification.slice(0, 3).join(' · ')}</p>)}</div><div class="compare-row"><span>Reference status</span>{products.map(product => <p data-product={product.id}>{product.status}</p>)}</div></div><div class="compare-actions"><a class="button button-accent" href="/contact/?intent=sample">Request a comparison sample <span>↗</span></a><a href="/requirements/">Review technical requirements →</a></div></section>
+  <section class="compare-guides section"><div class="section-heading"><p class="kicker dark"><span></span> Comparison guides</p><h2>Need a buying answer,<br />not just a table?</h2></div><div class="resource-stack">{comparisonGuides.map((guide, index) => <a href={`/compare/${guide.id}/`}><span>0{index + 1} · COMPARISON GUIDE</span><h3>{guide.title}</h3><b>↗</b></a>)}</div></section>
+  <script is:inline>
+    const compareTool = document.querySelector('[data-compare-tool]');
+    const compareInputs = [...compareTool?.querySelectorAll('input[type="checkbox"]') || []];
+    const setCompare = () => {
+      const selected = compareInputs.filter(input => input.checked).map(input => input.value);
+      compareTool?.querySelectorAll('[data-product]').forEach(cell => cell.hidden = !selected.includes(cell.dataset.product));
+      compareInputs.forEach(input => input.disabled = !input.checked && selected.length >= 3);
+    };
+    compareInputs.forEach(input => input.addEventListener('change', setCompare));
+    setCompare();
+  </script>
+</BaseLayout>

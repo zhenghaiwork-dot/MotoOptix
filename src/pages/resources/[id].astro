@@ -1,0 +1,28 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { requirements, supportTopics, comparisonGuides, solutions, applications } from '../../data/site';
+import { getProducts, resolveProductReferences } from '../../lib/products';
+export async function getStaticPaths() { const resources = await getCollection('resources'); return resources.map(resource => ({ params: { id: resource.id }, props: { resource } })); }
+const { resource } = Astro.props;
+const products = await getProducts();
+const relatedProductIds = resolveProductReferences(resource.data.relatedProducts);
+const { Content, headings } = await render(resource);
+const crumbs = [{ name: 'Home', url: '/' }, { name: 'Resources', url: '/resources/' }, { name: resource.data.title, url: `/resources/${resource.id}/` }];
+const articleSchema = { '@context': 'https://schema.org', '@type': 'Article', headline: resource.data.title, description: resource.data.description, datePublished: resource.data.publishedDate.toISOString(), author: { '@type': 'Organization', name: 'MotoOptix' }, publisher: { '@type': 'Organization', name: 'MotoOptix' } };
+const related = [
+  ...products.filter(x => relatedProductIds.includes(x.id)).map(x => ({ label: 'PRODUCT PLATFORM', title: x.name, href: `/products/${x.id}/` })),
+  ...requirements.filter(x => resource.data.relatedRequirements.includes(x.id)).map(x => ({ label: 'TECHNICAL REQUIREMENT', title: x.title, href: `/requirements/${x.id}/` })),
+  ...applications.filter(x => resource.data.relatedApplications.includes(x.id)).map(x => ({ label: 'APPLICATION', title: x.title, href: `/applications/${x.id}/` })),
+  ...solutions.filter(x => resource.data.relatedSolutions.includes(x.id)).map(x => ({ label: 'BUYER SOLUTION', title: x.title, href: `/solutions/${x.id}/` })),
+  ...supportTopics.filter(x => resource.data.relatedSupport.includes(x.id)).map(x => ({ label: 'BUYER SUPPORT', title: x.title, href: `/support/${x.id}/` })),
+  ...comparisonGuides.filter(x => resource.data.relatedComparisons.includes(x.id)).map(x => ({ label: 'COMPARISON GUIDE', title: x.title, href: `/compare/${x.id}/` })),
+];
+---
+<BaseLayout title={resource.data.title} description={resource.data.description} ogType="article" breadcrumbs={crumbs}>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(articleSchema)}></script>
+  <header class="article-hero"><a class="back-link" href="/resources/">← All buyer resources</a><p class="kicker dark"><span></span> {resource.data.category} · {resource.data.readingTime}</p><h1>{resource.data.title}</h1><p>{resource.data.description}</p></header>
+  <div class="article-layout"><aside><span>IN THIS GUIDE</span><ol>{headings.filter(h => h.depth === 2).map(h => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol><a class="button" href="/contact/">Discuss a requirement ↗</a></aside><article class="prose"><Content /></article></div>
+  {related.length > 0 && <section class="article-related"><header><p class="kicker dark"><span></span> Continue the buying journey</p><h2>Connect this guide to a product decision.</h2></header><div>{related.map(item => <a href={item.href}><small>{item.label}</small><strong>{item.title}</strong><span>Open related page →</span></a>)}</div></section>}
+  <section class="article-cta"><div><small>NEED A PRODUCT SHORTLIST?</small><h2>Turn the checklist into a buying brief.</h2></div><a class="button button-light" href="/contact/">Request sourcing support ↗</a></section>
+</BaseLayout>

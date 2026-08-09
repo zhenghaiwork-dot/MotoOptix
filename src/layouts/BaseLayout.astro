@@ -1,0 +1,152 @@
+---
+import '../styles/global.css';
+import { site } from '../data/site';
+import { websiteSchema, breadcrumbSchema, type Crumb } from '../lib/schema';
+
+interface Props {
+  title: string;
+  description: string;
+  ogType?: string;
+  breadcrumbs?: Crumb[];
+}
+
+const { title, description, ogType, breadcrumbs } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site || Astro.url.origin);
+const socialImage = new URL('/og.png', Astro.site || Astro.url.origin);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="x-default" href={canonical} />
+    <link rel="alternate" hreflang="en" href={canonical} />
+    <meta name="theme-color" content="#0b1412" />
+    <meta property="og:type" content={ogType ?? 'website'} />
+    <meta property="og:title" content={`${title} | ${site.brand}`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={socialImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={socialImage} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@type': 'Organization', name: site.brand, description: 'A sourcing and wholesale supply partner for motorcycle dash cams and smart display systems.', url: new URL('/', Astro.site || Astro.url.origin).href, email: site.email })}></script>
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(websiteSchema(Astro.site?.href || Astro.url.origin))}></script>
+    {breadcrumbs && <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema(breadcrumbs, Astro.site?.href || Astro.url.origin))}></script>}
+    <title>{title} | {site.brand}</title>
+    <style is="global">
+      .skip-link{position:absolute;left:-9999px;top:0;z-index:200;background:var(--ink,#101716);color:#fff;padding:12px 18px;font:600 13px 'DM Sans';text-decoration:none}
+      .skip-link:focus{left:14px;top:14px}
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="MotoOptix home">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i></span>
+        <span><strong>{site.brand}</strong><small>{site.descriptor}</small></span>
+      </a>
+      <nav aria-label="Main navigation" id="main-nav" class="mega-nav">
+        <details class="nav-group">
+          <summary>Products <span>⌄</span></summary>
+          <div class="mega-panel mega-panel-wide mega-products">
+            <div class="mega-intro"><small>PRODUCT PLATFORMS</small><p class="mega-title">Hardware selected around a real buying job.</p><p>Reference categories today. Verified models and fixed specifications after sample approval.</p><a href="/products/">View all products →</a></div>
+            <div class="mega-list"><a href="/products/screenless-dual-dvr/"><b>Screenless dual DVR</b><span>Hidden, hardwired recording</span></a><a href="/products/detachable-56-smart-display/"><b>Detachable smart display</b><span>Removable connected interface</span></a><a href="/products/vision-pro-625/"><b>6.25-inch camera display</b><span>GPS, BSD and TPMS options</span></a></div>
+            <div class="mega-links"><small>CONFIGURE & VERIFY</small><a href="/compare/">Compare platforms</a><a href="/private-label/">Private label options</a><a href="/quality/">Quality & evidence</a><a href="/how-we-work/">Sample-to-volume process</a></div>
+            <a class="mega-feature" href="/contact/"><small>NEED A SHORTLIST?</small><strong>Tell us the market, buyer and target quantity.</strong><span>Request product guidance ↗</span></a>
+          </div>
+        </details>
+        <details class="nav-group">
+          <summary>Solutions <span>⌄</span></summary>
+          <div class="mega-panel mega-panel-wide">
+            <div class="mega-intro"><small>BY BUYER TYPE</small><p class="mega-title">Different buyers need different evidence.</p><p>Choose the path closest to how you sell, install or deploy.</p><a href="/solutions/">All solutions →</a></div>
+            <div class="mega-list"><a href="/solutions/distributors/"><b>Distributors & brands</b><span>Range planning and private label</span></a><a href="/solutions/installers/"><b>Installers & dealers</b><span>Repeatable kits and support</span></a><a href="/solutions/fleets/"><b>Delivery & local fleets</b><span>Controlled hardware trials</span></a></div>
+            <div class="mega-links"><small>WORKING METHOD</small><a href="/how-we-work/">Sample-to-volume process</a><a href="/private-label/">Light private label</a><a href="/quality/">Verification process</a><a href="/faq/">Buyer FAQ</a></div>
+            <a class="mega-feature" href="/contact/"><small>START A CONVERSATION</small><strong>Choose a path, then scope a paid sample or volume RFQ.</strong><span>Talk to MotoOptix ↗</span></a>
+          </div>
+        </details>
+        <details class="nav-group">
+          <summary>Applications <span>⌄</span></summary>
+          <div class="mega-panel mega-panel-wide">
+            <div class="mega-intro"><small>FIND BY USE CASE</small><p class="mega-title">Start with the operating environment.</p><p>Translate delivery, touring, installation or commuter use into a better sample and verification brief.</p><a href="/applications/">All applications →</a></div>
+            <div class="mega-list"><a href="/applications/delivery-courier-motorcycle-camera/"><b>Delivery & courier</b><span>Low-touch recording operations</span></a><a href="/applications/touring-adventure-motorcycle-display/"><b>Touring & adventure</b><span>Smart display programs</span></a><a href="/applications/motorcycle-installer-program/"><b>Installer program</b><span>Repeatable workshop packages</span></a></div>
+            <div class="mega-links"><small>MORE APPLICATIONS</small><a href="/applications/scooter-urban-commuter-camera/">Scooter & commuter</a><a href="/solutions/fleets/">Fleet buying path</a><a href="/solutions/installers/">Installer buying path</a><a href="/products/">Browse hardware</a></div>
+            <a class="mega-feature" href="/contact/"><small>START WITH THE USE CASE</small><strong>Tell us who rides it, where it runs and what must be proven.</strong><span>Build a sample brief ↗</span></a>
+          </div>
+        </details>
+        <details class="nav-group">
+          <summary>Requirements <span>⌄</span></summary>
+          <div class="mega-panel mega-panel-wide">
+            <div class="mega-intro"><small>FIND BY REQUIREMENT</small><p class="mega-title">Turn a claim into a verification question.</p><p>Use technical requirement pages to define what must be checked before quotation or marketing.</p><a href="/requirements/">All requirements →</a></div>
+            <div class="mega-list"><a href="/requirements/waterproof-motorcycle-camera-system/"><b>Waterproofing</b><span>Host, lens and connector scope</span></a><a href="/requirements/acc-hardwired-motorcycle-camera-kit/"><b>ACC hardwiring</b><span>Power and installation planning</span></a><a href="/requirements/motorcycle-screen-sunlight-readability/"><b>Sunlight readability</b><span>Display evaluation questions</span></a></div>
+            <div class="mega-links"><small>MORE REQUIREMENTS</small><a href="/requirements/motorcycle-dash-cam-vibration-resistance/">Vibration resistance</a><a href="/requirements/motorcycle-camera-storage-and-footage-retrieval/">Storage & footage retrieval</a><a href="/quality/">Evidence process</a><a href="/resources/">Technical guides</a></div>
+            <a class="mega-feature" href="/contact/"><small>NEED A CHECKLIST?</small><strong>Get a focused list of questions for your chosen configuration.</strong><span>Ask a technical question ↗</span></a>
+          </div>
+        </details>
+        <details class="nav-group">
+          <summary>Support <span>⌄</span></summary>
+          <div class="mega-panel mega-panel-wide">
+            <div class="mega-intro"><small>BUYER SUPPORT</small><p class="mega-title">Prepare the order before the order.</p><p>Support pages cover samples, documentation, artwork, installation and spare parts.</p><a href="/support/">All support topics →</a></div>
+            <div class="mega-list"><a href="/support/request-spec-sheet-and-sample/"><b>Spec sheet & sample</b><span>Turn a requirement into a brief</span></a><a href="/support/compliance-document-verification/"><b>Document verification</b><span>Match evidence to product identity</span></a><a href="/support/installation-and-after-sales-planning/"><b>Installation & after-sales</b><span>Reduce support friction</span></a></div>
+            <div class="mega-links"><small>BUYER RESOURCES</small><a href="/support/private-label-artwork-and-boot-logo/">Private-label artwork</a><a href="/support/spare-parts-and-replacement-planning/">Spare-parts planning</a><a href="/resources/">Resource center</a><a href="/faq/">Buyer FAQ</a></div>
+            <a class="mega-feature" href="/contact/"><small>READY TO MOVE?</small><strong>Start a paid sample or a commercial RFQ with the right evidence request.</strong><span>Request pricing ↗</span></a>
+          </div>
+        </details>
+        <a href="/about/">About</a>
+      </nav>
+      <button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-controls="main-nav" aria-expanded="false"><span></span><span></span></button>
+      <a class="button button-small" href="/contact/">Request pricing <span>↗</span></a>
+    </header>
+    <main id="main"><slot /></main>
+    <footer>
+      <div class="footer-main footer-map">
+        <div class="footer-lead">
+          <a class="brand brand-light" href="/"><span class="brand-mark"><i></i><i></i></span><span><strong>MotoOptix</strong><small>Motorcycle Vision Supply</small></span></a>
+          <p>Market-ready motorcycle camera and smart display systems for distributors, installers and accessory brands.</p>
+        </div>
+        <div><b>Products</b><a href="/products/screenless-dual-dvr/">Screenless dual DVR</a><a href="/products/detachable-56-smart-display/">Detachable smart display</a><a href="/products/vision-pro-625/">6.25-inch camera display</a><a href="/products/">All platforms</a></div>
+        <div><b>Solutions</b><a href="/solutions/distributors/">Distributors & brands</a><a href="/solutions/installers/">Installers & dealers</a><a href="/solutions/fleets/">Delivery & local fleets</a><a href="/solutions/">All solutions</a></div>
+        <div><b>Explore by need</b><a href="/applications/">Applications</a><a href="/requirements/">Technical requirements</a><a href="/support/">Buyer support</a><a href="/resources/">Buyer resources</a></div>
+        <div><b>Company & help</b><a href="/how-we-work/">Sample to volume</a><a href="/quality/">Verification process</a><a href="/faq/">Buyer FAQ</a><a href="/contact/">Contact</a></div>
+      </div>
+      <div class="footer-bottom"><span>© {new Date().getFullYear()} MotoOptix</span><span class="legal-links"><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a></span><span>Specifications are confirmed against the selected configuration before order.</span></div>
+    </footer>
+    <script is:inline>
+      const toggle = document.querySelector('.menu-toggle');
+      const nav = document.querySelector('#main-nav');
+      toggle?.addEventListener('click', () => {
+        const open = toggle.getAttribute('aria-expanded') === 'true';
+        toggle.setAttribute('aria-expanded', String(!open));
+        nav?.classList.toggle('nav-open', !open);
+      });
+      const groups = [...document.querySelectorAll('.nav-group')];
+      const supportsHover = window.matchMedia('(hover: hover) and (pointer: fine)');
+      const hoverTimers = new WeakMap();
+      const closeGroups = except => groups.forEach(group => { if (group !== except) group.removeAttribute('open'); });
+      const cancelClose = group => {
+        const timer = hoverTimers.get(group);
+        if (timer) window.clearTimeout(timer);
+      };
+      groups.forEach(group => {
+        group.addEventListener('toggle', () => { if (group.open) closeGroups(group); });
+        group.addEventListener('mouseenter', () => {
+          if (!supportsHover.matches) return;
+          cancelClose(group);
+          window.setTimeout(() => { if (group.matches(':hover')) { group.setAttribute('open', ''); closeGroups(group); } }, 150);
+        });
+        group.addEventListener('mouseleave', () => {
+          if (!supportsHover.matches) return;
+          hoverTimers.set(group, window.setTimeout(() => group.removeAttribute('open'), 220));
+        });
+        group.addEventListener('focusin', () => { group.setAttribute('open', ''); closeGroups(group); });
+        group.addEventListener('focusout', event => {
+          if (!group.contains(event.relatedTarget)) group.removeAttribute('open');
+        });
+      });
+      document.addEventListener('click', event => {
+        if (!event.target.closest('.mega-nav')) groups.forEach(group => group.removeAttribute('open'));
+      });
+    </script>
+  </body>
+</html>

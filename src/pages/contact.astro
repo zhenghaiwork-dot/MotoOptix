@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../data/site';
+import { getProducts } from '../lib/products';
+import { contactPageSchema } from '../lib/schema';
+const products = await getProducts();
+const formEndpoint = import.meta.env.PUBLIC_FORM_ENDPOINT || `mailto:${site.email}`;
+const usesMailClient = !import.meta.env.PUBLIC_FORM_ENDPOINT;
+const whatsappUrl = import.meta.env.PUBLIC_WHATSAPP_URL || '';
+const base = Astro.site?.href || Astro.url.origin;
+---
+<BaseLayout title="Request Wholesale Pricing" description="Tell MotoOptix your target market, quantity and motorcycle camera requirements to receive a focused product shortlist." breadcrumbs={[{ name: 'Home', url: '/' }, { name: 'Contact', url: '/contact/' }]}>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(contactPageSchema(site.email, base))}></script>
+  <section class="contact-layout">
+    <div><p class="kicker dark"><span></span> Start with your buying brief</p><h1>Request Motorcycle Dash Cam<br /><em>Wholesale Pricing.</em></h1><p>Tell us where you sell, how many units you are evaluating and what cannot be compromised. We will use that to narrow down suitable configurations.</p><p class="contact-intent-note" hidden data-sample-intent>You selected a sample request. The form is pre-set for 1–3 samples; add the checks you need completed before a wider order.</p><div class="contact-note"><b>What happens next</b><ol><li>We review your market and requirements.</li><li>We identify a small set of suitable configurations.</li><li>Specifications, sample price and branding MOQ are confirmed.</li></ol></div>{whatsappUrl && <a class="contact-direct-link" href={whatsappUrl} rel="noopener noreferrer">Discuss this RFQ on WhatsApp ↗</a>}</div>
+    <form class="rfq-form" action={formEndpoint} method="post" enctype={usesMailClient ? 'text/plain' : 'application/x-www-form-urlencoded'} data-rfq-form>
+      <input class="hp-field" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
+      <input type="hidden" name="subject" value="New MotoOptix buying brief" />
+      <input type="hidden" name="solution_interest" value="" />
+      <input type="hidden" name="inquiry_intent" value="pricing" />
+      <input type="hidden" name="source_page" value="" />
+      <input type="hidden" name="submitted_at" value="" />
+      <input type="hidden" name="utm_source" value="" />
+      <input type="hidden" name="utm_medium" value="" />
+      <input type="hidden" name="utm_campaign" value="" />
+      <div class="field-row"><label>Your name<input name="name" autocomplete="name" required /></label><label>Business email<input type="email" name="email" autocomplete="email" required /></label></div>
+      <label>Company / business <small>(optional)</small><input name="company" autocomplete="organization" /></label>
+      <div class="field-row"><label>Buyer type <small>(optional)</small><select name="buyer_type"><option value="">Select one</option><option>Distributor / importer</option><option>Accessory brand</option><option>Installer / dealer</option><option>Delivery / local fleet</option><option>Other business buyer</option></select></label><label>Estimated quantity <small>(optional)</small><select name="quantity"><option value="">Select range</option><option>1–3 samples</option><option>10–49 units</option><option>50–199 units</option><option>200+ units</option></select></label></div>
+      <label>Product interest<select name="product"><option value="">Not sure — recommend a product</option>{products.map(item => <option value={item.id}>{item.name} · {item.code}</option>)}</select></label>
+      <label>Market and must-have requirements<textarea name="requirements" rows="6" required placeholder="Target country, required features, price position, logo or packaging needs..."></textarea></label>
+      <label class="consent-field"><input type="checkbox" name="privacy_consent" value="yes" required /><span>I agree that MotoOptix may use these details to respond to this request, as described in the <a href="/privacy/">Privacy Policy</a>.</span></label>
+      <button class="button" type="submit">Send buying brief ↗</button><small>{usesMailClient ? 'Preview mode: submission opens your email application. Set PUBLIC_FORM_ENDPOINT before launch to enable direct delivery.' : 'Your information is used only to assess and respond to this business request.'} We normally reply within 1–2 business days with a focused shortlist, open specification questions and sample next steps. Review the <a href="/faq/">Buyer FAQ</a>.</small>
+    </form>
+  </section>
+  <script is:inline>
+    const rfqForm = document.querySelector('[data-rfq-form]');
+    if (rfqForm instanceof HTMLFormElement) {
+      const params = new URLSearchParams(window.location.search);
+      const setField = (name, value) => {
+        const field = rfqForm.elements.namedItem(name);
+        if (field instanceof HTMLInputElement) field.value = value;
+      };
+      setField('source_page', window.location.href);
+      setField('submitted_at', new Date().toISOString());
+      ['utm_source', 'utm_medium', 'utm_campaign'].forEach(name => setField(name, params.get(name) || ''));
+      setField('solution_interest', params.get('solution') || '');
+      const requestedProduct = params.get('product') || '';
+      const productField = rfqForm.elements.namedItem('product');
+      if (productField instanceof HTMLSelectElement && [...productField.options].some(option => option.value === requestedProduct)) productField.value = requestedProduct;
+      const intent = params.get('intent') === 'sample' ? 'sample' : 'pricing';
+      setField('inquiry_intent', intent);
+      if (intent === 'sample') {
+        setField('subject', 'New MotoOptix sample request');
+        const quantityField = rfqForm.elements.namedItem('quantity');
+        if (quantityField instanceof HTMLSelectElement) quantityField.value = '1–3 samples';
+        document.querySelector('[data-sample-intent]')?.removeAttribute('hidden');
+        const submitButton = rfqForm.querySelector('button[type="submit"]');
+        if (submitButton) submitButton.textContent = 'Send sample request ↗';
+      }
+      rfqForm.addEventListener('submit', () => setField('submitted_at', new Date().toISOString()));
+    }
+  </script>
+</BaseLayout>

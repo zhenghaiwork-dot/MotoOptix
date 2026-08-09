@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+const groups = [
+  {
+    title: 'Samples and ordering',
+    items: [
+      { q: 'Can I order one sample before a volume order?', a: 'Yes, the sourcing process is designed to begin with a paid sample of an identified configuration. Sample price, freight, included accessories and lead time are confirmed before dispatch. A sample is not represented as free unless a specific written offer says otherwise.' },
+      { q: 'What is the minimum order quantity?', a: 'There is no single site-wide MOQ. The standard product, boot logo, product label, printed box and manual may each have different minimum quantities. The quotation separates these requirements for the selected supplier configuration.' },
+      { q: 'Can different models be combined in one order?', a: 'Mixed-model consolidation may be possible, but it depends on supplier MOQs, packaging, production timing and shipping arrangements. It should be requested in the buying brief and confirmed in the quotation.' },
+      { q: 'Do you publish wholesale prices online?', a: 'Not at the reference-platform stage. Price depends on the exact component package, quantity, branding, inspection scope, trade term and quotation validity date. We provide a dated price after narrowing the configuration.' },
+    ],
+  },
+  {
+    title: 'Products and specifications',
+    items: [
+      { q: 'Why do the current product pages not show a complete fixed specification table?', a: 'The pages describe sourcing platforms while supplier samples are still being selected. A fixed table is published only after one exact model and revision has been reviewed, preventing claims from several factories from being combined into a product that does not exist.' },
+      { q: 'How do you verify 4K, sensor and image-stabilization claims?', a: 'We request the exact sensor, native and encoded resolution, frame rate, codec and unedited files from every channel. The wording on a marketplace listing alone is not treated as proof.' },
+      { q: 'Does an IP67 camera mean the complete system is IP67?', a: 'No. The display or recorder, camera bodies, connectors and cable entries can have different protection. Claims are separated by component and matched to available reports or supplier declarations.' },
+      { q: 'Can you guarantee compatibility with every motorcycle?', a: 'No universal compatibility claim is made. Voltage, mounting space, cable routing, connector size, steering clearance and installation method must be assessed for the intended motorcycles.' },
+    ],
+  },
+  {
+    title: 'Branding, supply and support',
+    items: [
+      { q: 'Are you the factory?', a: 'MotoOptix is positioned as a sourcing and wholesale supply partner working with manufacturing partners. We do not claim that every factory, production line or certification is owned by MotoOptix.' },
+      { q: 'What private-label options are realistic?', a: 'The practical starting options are usually a boot logo, product or accessory label, packaging, manual, barcode and curated accessory bundle. App branding, new tooling, PCB changes and deep firmware work are separate projects and are not assumed available.' },
+      { q: 'How are warranty and defective units handled?', a: 'Warranty period, dead-on-arrival handling, spare-unit ratio, required defect evidence and replacement process must be agreed for the selected supplier and recorded in the commercial documents. There is no unsupported site-wide warranty promise.' },
+      { q: 'Can you provide CE, FCC, RoHS or other documents?', a: 'Available documents are collected and reviewed for applicant, report number, date, model coverage and relevant radio modules. A logo on a listing or a report for a similar model is not automatically treated as coverage for the quoted product.' },
+    ],
+  },
+];
+const faqSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: groups.flatMap(group => group.items).map(item => ({ '@type': 'Question', name: item.q, acceptedAnswer: { '@type': 'Answer', text: item.a } })) };
+---
+<BaseLayout title="Wholesale Motorcycle Camera Buyer FAQ" description="Answers about samples, MOQ, specifications, private label, supplier status, compliance documents and after-sales terms.">
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
+  <section class="page-hero"><p class="kicker dark"><span></span> Ask before you assume</p><h1>Wholesale Motorcycle Dash Cam<br /><em>Buyer FAQ.</em></h1><p>Direct answers about samples, specifications, supplier status, private label and commercial terms.</p></section>
+  <section class="faq-groups">{groups.map((group, groupIndex) => <div class="faq-group"><header><span>0{groupIndex + 1}</span><h2>{group.title}</h2></header><div>{group.items.map((item, itemIndex) => <details open={groupIndex === 0 && itemIndex === 0}><summary>{item.q}<span aria-hidden="true">+</span></summary><p>{item.a}</p></details>)}</div></div>)}</section>
+  <section class="article-cta"><div><small>QUESTION NOT COVERED?</small><h2>Send us the buying context.</h2></div><a class="button button-light" href="/contact/">Ask a sourcing question ↗</a></section>
+</BaseLayout>

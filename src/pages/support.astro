@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { supportTopics } from '../data/site';
+import { collectionPageSchema } from '../lib/schema';
+const base = Astro.site?.href || Astro.url.origin;
+const crumbs = [{ name: 'Home', url: '/' }, { name: 'Support', url: '/support/' }];
+---
+<BaseLayout title="Motorcycle Electronics Buyer Support" description="Sample requests, document verification, private-label artwork, installation planning and spare-parts guidance for motorcycle electronics buyers." breadcrumbs={crumbs}>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(collectionPageSchema(crumbs, base, supportTopics.map(item => ({ name: item.title, url: `/support/${item.id}/`, description: item.summary }))))}></script>
+  <section class="page-hero"><p class="kicker dark"><span></span> Prepare the order before the order</p><h1>Motorcycle Electronics Buyer Support<br /><em>& Order Preparation.</em></h1><p>Buyer support content turns a broad inquiry into a documented sample, commercial and after-sales plan.</p></section>
+  <section class="solution-list">{supportTopics.map((item, i) => <article><span>0{i + 1}</span><div><small>{item.eyebrow}</small><h2>{item.title}</h2></div><ul>{item.priorities.map(value => <li>{value}</li>)}</ul><a href={`/support/${item.id}/`}>Open support guide ↗</a></article>)}</section>
+</BaseLayout>

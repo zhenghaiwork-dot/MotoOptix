@@ -1,0 +1,22 @@
+---
+import type { ProductPlatform } from '../lib/products';
+import { applications, requirements, solutions, supportTopics } from '../data/site';
+interface Props { product: ProductPlatform; products: ProductPlatform[]; }
+const { product, products } = Astro.props;
+const relatedProducts = products.filter(item => product.relatedProducts.includes(item.id));
+const relatedApplications = applications.filter(item => product.relatedApplications.includes(item.id));
+const relatedRequirements = requirements.filter(item => product.relatedRequirements.includes(item.id));
+const relatedSolutions = solutions.filter(item => product.relatedSolutions.includes(item.id));
+const relatedSupport = supportTopics.filter(item => product.relatedSupport.includes(item.id));
+---
+<section class="product-mesh">
+  <header><p class="kicker dark"><span></span> Continue the buying decision</p><h2>Choose the next question<br />you need to answer.</h2><p>These links turn a product platform into a practical evaluation path. They are recommendations, not evidence claims.</p></header>
+  <div class="mesh-grid">
+    <article><small>COMPARE PLATFORMS</small><h3>Related hardware</h3>{relatedProducts.map(item => <a href={`/products/${item.id}/`}><b>{item.name}</b><span>{item.type} →</span></a>)}<a class="mesh-all" href="/compare/">Open comparison tool →</a></article>
+    <article><small>CONFIRM THE USE CASE</small><h3>Best-fit applications</h3>{relatedApplications.map(item => <a href={`/applications/${item.id}/`}><b>{item.title}</b><span>Review application →</span></a>)}</article>
+    <article><small>VERIFY THE DETAILS</small><h3>Requirements to check</h3>{relatedRequirements.map(item => <a href={`/requirements/${item.id}/`}><b>{item.title}</b><span>Open checklist →</span></a>)}</article>
+    <article><small>PLAN THE COMMERCIAL PATH</small><h3>Buyer solutions</h3>{relatedSolutions.map(item => <a href={`/solutions/${item.id}/`}><b>{item.title}</b><span>Review solution →</span></a>)}</article>
+    <article><small>PREPARE FOR DELIVERY</small><h3>Buyer support</h3>{relatedSupport.map(item => <a href={`/support/${item.id}/`}><b>{item.title}</b><span>Open support guide →</span></a>)}</article>
+    <article class="mesh-cta"><small>READY TO DECIDE?</small><h3>Compare the right configuration—not a generic listing.</h3><p>Start with a paid sample or share your target market and expected quantity for a focused RFQ.</p><a class="button button-accent" href={`/contact/?product=${product.id}`}>Request sample & pricing <span>↗</span></a><a href="/compare/">Compare all platforms →</a></article>
+  </div>
+</section>

@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { applications } from '../data/site';
+import { collectionPageSchema } from '../lib/schema';
+const base = Astro.site?.href || Astro.url.origin;
+const crumbs = [{ name: 'Home', url: '/' }, { name: 'Applications', url: '/applications/' }];
+---
+<BaseLayout title="Motorcycle Camera Applications" description="Explore motorcycle camera and smart display sourcing by delivery, touring, installation and commuter application." breadcrumbs={crumbs}>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(collectionPageSchema(crumbs, base, applications.map(item => ({ name: item.title, url: `/applications/${item.id}/`, description: item.summary }))))}></script>
+  <section class="page-hero"><p class="kicker dark"><span></span> Start with how the hardware will be used</p><h1>Motorcycle Camera & Smart Display<br /><em>Applications.</em></h1><p>Application pages translate a real operating environment into a clearer sample, installation and verification brief.</p></section>
+  <section class="solution-list">{applications.map((item, i) => <article><span>0{i + 1}</span><div><small>{item.eyebrow}</small><h2>{item.title}</h2></div><ul>{item.priorities.map(priority => <li>{priority}</li>)}</ul><a href={`/applications/${item.id}/`}>Review application ↗</a></article>)}</section>
+</BaseLayout>

@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import RelatedResources from '../../components/RelatedResources.astro';
+import { applications, solutions } from '../../data/site';
+import { getProducts } from '../../lib/products';
+export function getStaticPaths() { return applications.map(item => ({ params: { id: item.id }, props: { item } })); }
+const { item } = Astro.props;
+const products = await getProducts();
+const relatedProducts = products.filter(product => item.recommendedProducts.includes(product.id));
+const relatedSolutions = solutions.filter(solution => item.relatedSolutions.includes(solution.id));
+const seoTitles: Record<string, string> = {
+  'delivery-courier-motorcycle-camera': 'Delivery Fleet Motorcycle Camera Systems',
+  'touring-adventure-motorcycle-display': 'Touring Motorcycle Smart Display Systems',
+  'scooter-urban-commuter-camera': 'Urban Scooter & Commuter Camera Systems',
+};
+const seoTitle = seoTitles[item.id] || item.title;
+---
+<BaseLayout title={seoTitle} description={item.summary} breadcrumbs={[{ name: 'Home', url: '/' }, { name: 'Applications', url: '/applications/' }, { name: item.title, url: `/applications/${item.id}/` }]}>
+  <section class="solution-hero"><div><a class="back-link" href="/applications/">← All applications</a><p class="kicker dark"><span></span> {item.eyebrow}</p><h1>{item.title}</h1><p>{item.summary}</p><a class="button" href={`/contact/?application=${item.id}`}>{item.cta} ↗</a></div><aside><small>THE OPERATING PROBLEM</small><p>{item.problem}</p></aside></section>
+  <section class="solution-columns"><div><small>WHAT TO PLAN</small><ol>{item.priorities.map((value, i) => <li><span>0{i + 1}</span>{value}</li>)}</ol></div><div><small>WHAT TO VERIFY</small><ol>{item.verification.map((value, i) => <li><span>0{i + 1}</span>{value}</li>)}</ol></div></section>
+  <section class="recommended"><div><p class="kicker dark"><span></span> Related paths</p><h2>Move from use case to a real shortlist.</h2><p>These links are starting points. Final suitability remains dependent on the selected supplier revision and sample.</p></div><div>{relatedProducts.map(product => <a href={`/products/${product.id}/`}><small>PRODUCT · {product.code}</small><h3>{product.name}</h3><span>Review platform →</span></a>)}{relatedSolutions.map(solution => <a href={`/solutions/${solution.id}/`}><small>SOLUTION · {solution.eyebrow}</small><h3>{solution.title}</h3><span>Review buying path →</span></a>)}</div></section>
+  <RelatedResources applicationId={item.id} />
+</BaseLayout>

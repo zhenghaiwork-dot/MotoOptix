@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { comparisonGuides } from '../../data/site';
+import { getProducts, resolveProductReferences } from '../../lib/products';
+export function getStaticPaths() { return comparisonGuides.map(guide => ({ params: { id: guide.id }, props: { guide } })); }
+const { guide } = Astro.props;
+const products = await getProducts();
+const relatedProductIds = resolveProductReferences(guide.productIds);
+const relatedProducts = products.filter(product => relatedProductIds.includes(product.id));
+const seoTitles: Record<string, string> = {
+  'motorcycle-dvr-vs-smart-display': 'Motorcycle DVR vs Smart Display',
+  'motorcycle-dash-cam-installers-vs-fleets': 'Dash Cam Needs: Installers vs Fleets',
+};
+const seoTitle = seoTitles[guide.id] || guide.title;
+---
+<BaseLayout title={seoTitle} description={guide.description} ogType="article" breadcrumbs={[{ name: 'Home', url: '/' }, { name: 'Compare', url: '/compare/' }, { name: guide.title, url: `/compare/${guide.id}/` }]}>
+  <section class="solution-hero"><div><a class="back-link" href="/compare/">← Compare all platforms</a><p class="kicker dark"><span></span> Comparison guide</p><h1>{guide.title}</h1><p>{guide.description}</p><a class="button" href="/compare/">Use the comparison tool ↗</a></div><aside><small>COMPARISON PRINCIPLE</small><p>Compare commercial fit and verification work first. Only treat technical figures as facts after the selected sample and supplier documents support them.</p></aside></section>
+  <section class="compare-editorial"><div><small>OPTION A</small><h2>{guide.leftTitle}</h2><p>{guide.rows[0].left}</p></div><div><small>OPTION B</small><h2>{guide.rightTitle}</h2><p>{guide.rows[0].right}</p></div><div><small>THE DECISION RULE</small><h2>What to check next</h2><p>{guide.recommendation}</p></div></section>
+  <section class="compare-detail"><div class="compare-detail-head"><p class="kicker dark"><span></span> Decision factors</p><h2>Compare the buying job,<br />not a headline spec.</h2></div><div class="compare-detail-table">{guide.rows.map(row => <div><strong>{row.label}</strong><p>{row.left}</p><p>{row.right}</p></div>)}</div></section>
+  <section class="recommended"><div><p class="kicker dark"><span></span> Continue the evaluation</p><h2>Move from comparison to the evidence that matters.</h2><p>These paths provide the product and buying context behind the decision.</p></div><div>{relatedProducts.map(product => <a href={`/products/${product.id}/`}><small>PRODUCT · {product.code}</small><h3>{product.name}</h3><span>Review platform →</span></a>)}{guide.relatedLinks.map(item => <a href={item.href}><small>RELATED PATH</small><h3>{item.label}</h3><span>Continue evaluation →</span></a>)}</div></section>
+  <section class="detail-cta"><p class="kicker"><span></span> Make it specific</p><h2>Compare a selected<br />sample configuration.</h2><a class="button button-light" href={`/contact/?compare=${guide.id}`}>Request sample & pricing ↗</a></section>
+</BaseLayout>

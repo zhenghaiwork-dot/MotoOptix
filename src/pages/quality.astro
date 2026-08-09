@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+const evidence = [
+  ['Product identity','Model code, quoted configuration, revision and included accessories should refer to the same product.'],
+  ['Video evidence','Representative unedited footage is reviewed for the selected front and rear camera configuration.'],
+  ['Environmental claims','Ingress and temperature claims are separated by component and matched to available evidence.'],
+  ['Electrical details','Input range, ACC behavior, consumption, shutdown and low-voltage protection are requested.'],
+  ['Compliance documents','Reports or declarations are checked for applicant, model coverage and relevant radio modules.'],
+  ['Batch controls','Approved configuration, artwork and agreed inspection points are recorded before production.'],
+];
+---
+<BaseLayout title="Product Verification & Quality Process" description="How MotoOptix handles product identity, specification evidence, compliance documents and pre-shipment checks.">
+  <section class="page-hero"><p class="kicker dark"><span></span> Evidence belongs to a configuration</p><h1>Motorcycle Camera Product Verification<br /><em>& Quality Process.</em></h1><p>A certificate, test result or specification from one version should not be used to decorate every similar-looking product. We organize evidence around the item being quoted.</p></section>
+  <section class="evidence-grid">{evidence.map((item, i) => <article><span>0{i+1}</span><h2>{item[0]}</h2><p>{item[1]}</p></article>)}</section>
+  <section class="split-content reverse"><div><p class="kicker dark"><span></span> Inspection scope</p><h2>Quality control must be defined, not implied.</h2><p>The appropriate checks depend on order size, product risk and the agreed commercial scope. A sample evaluation does not prove every production unit, and a visual inspection does not replace laboratory testing.</p></div><div class="check-table"><div><span>Sample functional review</span><b>Before volume decision</b></div><div><span>Packaging / artwork proof</span><b>Before production</b></div><div><span>Quantity and appearance</span><b>Batch inspection option</b></div><div><span>Recording spot check</span><b>Defined sampling plan</b></div><div><span>Document collection</span><b>Matched to model</b></div><div><span>Third-party laboratory test</span><b>Quoted when required</b></div></div></section>
+  <section class="detail-cta"><p class="kicker"><span></span> Define your evidence needs</p><h2>Tell us what your market<br />requires before we quote.</h2><a class="button button-light" href="/contact/">Discuss verification scope ↗</a></section>
+</BaseLayout>

@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+const steps = [
+  ['01','Buying brief','Share your target market, buyer type, expected quantity, price position and non-negotiable features.'],
+  ['02','Product shortlist','We narrow overlapping supplier models into a small set of configurations worth evaluating.'],
+  ['03','Paid sample','You approve an exact sample configuration. Sample and freight costs are stated before dispatch.'],
+  ['04','Evidence review','Critical claims, documents, footage, installation details and branding options are checked against that configuration.'],
+  ['05','Commercial approval','MOQ, tier pricing, lead time, packaging, spare units and warranty handling are recorded in the quotation.'],
+  ['06','Controlled order','Approved artwork and configuration are locked for the batch, followed by agreed pre-shipment checks.'],
+];
+---
+<BaseLayout title="From Product Shortlist to Volume Order" description="See the MotoOptix sourcing process from buying brief and paid sample to configuration approval and volume supply.">
+  <section class="page-hero"><p class="kicker dark"><span></span> Sample first, scale with evidence</p><h1>Motorcycle Electronics Sourcing<br /><em>from Sample to Volume.</em></h1><p>Our process is designed for buyers who need a workable product—not an enormous catalog or a promise that every configuration is already verified.</p></section>
+  <section class="process-list">{steps.map(step => <article><span>{step[0]}</span><h2>{step[1]}</h2><p>{step[2]}</p></article>)}</section>
+  <section class="expectation-grid"><div><p class="kicker dark"><span></span> Clear expectations</p><h2>What we need from you.</h2></div><ul><li>Target country and sales channel</li><li>Initial and expected repeat quantity</li><li>Required camera or display functions</li><li>Target retail or landed-cost position</li><li>Logo, packaging and manual requirements</li><li>Required documents and delivery destination</li></ul><div><h3>Not sure which product?</h3><p>That is a valid starting point. Describe the customer, installation and price segment instead of guessing a model.</p><a class="button" href="/contact/">Send a buying brief ↗</a></div></section>
+  <section class="truth-panel"><div><span>WHAT WE DO NOT PROMISE</span><h2>No universal “best model.” No unverified specification bundle.</h2></div><p>The preferred configuration depends on the market, installation, order size and supplier revision. A recommendation is provisional until the relevant sample and commercial documents have been reviewed.</p></section>
+</BaseLayout>

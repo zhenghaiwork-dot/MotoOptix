@@ -1,0 +1,91 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { getProducts } from '../lib/products';
+const products = await getProducts();
+const featuredProducts = products.filter((product) => product.featured).slice(0, 6);
+---
+<BaseLayout title="Wholesale Motorcycle Dash Cams & Smart Displays" description="MotoOptix supplies market-ready motorcycle dash cams and smart displays with sample ordering, volume pricing and practical private-label options.">
+  <section class="hero hero-v2">
+    <img src="/motorcycle-road-placeholder.jpg" alt="Motorcycle beside a remote mountain road" width="1920" height="1080" fetchpriority="high" />
+    <div class="hero-shade"></div>
+    <div class="hero-copy">
+      <p class="kicker"><span></span> Motorcycle cameras · smart displays · wholesale supply</p>
+      <h1><span>Wholesale Motorcycle</span><em>Dash Cams & Smart Displays.</em></h1>
+      <p class="hero-lead">Source motorcycle dash cams and smart riding displays with a clearer path from paid sample to volume order.</p>
+      <div class="hero-actions"><a class="button button-accent" href="/products/">Explore product platforms <span>↗</span></a><a class="button button-glass" href="/contact/">Request a shortlist</a></div>
+    </div>
+    <div class="hero-sidecard"><small>START BY BUYER TYPE</small><a href="/solutions/distributors/"><span>01</span> Distributors & brands <b>↗</b></a><a href="/solutions/installers/"><span>02</span> Installers & dealers <b>↗</b></a><a href="/solutions/fleets/"><span>03</span> Delivery & local fleets <b>↗</b></a></div>
+    <div class="hero-foot"><span>REFERENCE PLATFORMS — SPECIFICATIONS CONFIRMED AFTER SAMPLE SELECTION</span><a href="/how-we-work/">See our sourcing process →</a></div>
+  </section>
+
+  <section class="category-rail"><span>SHOP THE RANGE</span><a href="/products/screenless-dual-dvr/"><b>01</b> Motorcycle DVR</a><a href="/products/vision-pro-625/"><b>02</b> Smart ride displays</a><a href="/private-label/"><b>03</b> Private label</a><a href="/quality/"><b>04</b> Verification</a></section>
+
+  <section class="discovery-section"><div><p class="kicker dark"><span></span> Find your path</p><h2>Not sure where to begin?</h2><p>Enter the site by hardware, buying role, operating environment or the requirement you need to prove.</p></div><div class="discovery-grid"><a href="/products/"><small>01 / HARDWARE</small><strong>Find by product</strong><span>DVR and smart display platforms ↗</span></a><a href="/solutions/"><small>02 / BUYING ROLE</small><strong>Find by solution</strong><span>Distributor, installer or fleet path ↗</span></a><a href="/applications/"><small>03 / USE CASE</small><strong>Find by application</strong><span>Delivery, touring, workshop or commuter ↗</span></a><a href="/requirements/"><small>04 / TECHNICAL NEED</small><strong>Find by requirement</strong><span>Water, power, vibration, display or storage ↗</span></a></div></section>
+
+  <section class="section intro-grid">
+    <div><p class="kicker dark"><span></span> Selected for the motorcycle channel</p><h2>Not another<br />factory catalog.</h2></div>
+    <div><p>We organize products the way a distributor or installer evaluates them: by category, installation, price position and support burden—not by an endless list of nearly identical model numbers.</p><p class="muted">Final specifications, compliance documents and branding MOQ are confirmed for the selected configuration before quotation.</p></div>
+  </section>
+
+  <section class="trust-links section-tight">
+    <a href="/how-we-work/"><small>PROCESS 01</small><h3>Sample before volume</h3><span>See the order path ↗</span></a>
+    <a href="/private-label/"><small>CAPABILITY 02</small><h3>Brand what matters</h3><span>Review private label ↗</span></a>
+    <a href="/quality/"><small>EVIDENCE 03</small><h3>Verify before claims</h3><span>Review quality process ↗</span></a>
+  </section>
+
+  <section class="product-grid section-tight">
+    {featuredProducts.map(product => <ProductCard product={product} />)}
+  </section>
+
+  <section class="decision-section">
+    <div class="decision-heading"><p class="kicker dark"><span></span> Category decision guide</p><h2>Start with the buying job.<br />Then choose the hardware.</h2><p>These are platform directions, not invented fixed specifications. The final model, evidence pack and quotation follow sample selection.</p></div>
+    <div class="decision-table" role="table" aria-label="Motorcycle camera product category comparison">
+      <div class="decision-row decision-head" role="row"><span>Platform</span><span>Best fit</span><span>Commercial reason</span><span>First step</span></div>
+      <a class="decision-row" role="row" href="/products/screenless-dual-dvr/"><strong><small>01 / RECORDING</small>Screenless dual DVR</strong><span>Installers · fleet trials</span><span>Low-touch front/rear evidence without a cockpit screen.</span><b>Build a trial kit ↗</b></a>
+      <a class="decision-row" role="row" href="/products/detachable-56-smart-display/"><strong><small>02 / CONNECTED</small>Detachable 5.6-inch display</strong><span>Dealers · accessory retail</span><span>Removable CarPlay-led upgrade with two mounting directions.</span><b>Review the platform ↗</b></a>
+      <a class="decision-row" role="row" href="/products/vision-pro-625/"><strong><small>03 / PREMIUM</small>6.25-inch camera display</strong><span>Brands · premium installers</span><span>GPS, BSD, camera and TPMS configuration ladder.</span><b>Plan a sample ↗</b></a>
+    </div>
+  </section>
+
+  <section class="dark-section">
+    <div class="section-heading"><p class="kicker"><span></span> Built around your buying job</p><h2>More than a translated<br />supplier listing.</h2></div>
+    <div class="value-grid">
+      <article><span>01</span><h3>Shortlist</h3><p>We reduce overlapping factory models into a small, understandable product range.</p></article>
+      <article><span>02</span><h3>Verify</h3><p>Critical specifications and available documents are checked before they become claims.</p></article>
+      <article><span>03</span><h3>Prepare</h3><p>Choose logo, packaging, manuals and accessory bundles suited to your sales channel.</p></article>
+      <article><span>04</span><h3>Deliver</h3><p>Consolidated communication, pre-shipment checks and practical after-sales coordination.</p></article>
+    </div>
+  </section>
+
+  <section class="section buyer-paths">
+    <div class="section-heading"><p class="kicker dark"><span></span> Choose your path</p><h2>What are you sourcing for?</h2></div>
+    <div class="path-grid">
+      <a href="/solutions/distributors/"><span>01</span><div><small>DISTRIBUTORS & BRANDS</small><h3>Build a focused motorcycle electronics range.</h3><p>Samples, tiered pricing and private-label options for a sellable product line.</p></div><b>↗</b></a>
+      <a href="/solutions/installers/"><span>02</span><div><small>INSTALLERS & DEALERS</small><h3>Standardize installs and reduce support friction.</h3><p>Compatible accessories, wiring information and repeatable configurations.</p></div><b>↗</b></a>
+      <a href="/solutions/fleets/"><span>03</span><div><small>DELIVERY & LOCAL FLEETS</small><h3>Evaluate durable recording for daily operations.</h3><p>Sample-led evaluation for hardwired, low-touch recording systems.</p></div><b>↗</b></a>
+    </div>
+  </section>
+
+  <section class="proof-section">
+    <div class="proof-copy"><p class="kicker"><span></span> Evidence before adjectives</p><h2>We separate what is<br />listed, checked and approved.</h2><p>A 1688 listing is a lead—not proof. Product pages remain reference platforms until the chosen sample and supplier documents support a claim.</p><a class="button button-accent" href="/quality/">See the verification gates <span>↗</span></a></div>
+    <ol class="proof-ladder">
+      <li><span>01</span><div><small>DISCOVERY</small><h3>Supplier-listed</h3><p>Useful for building questions, never presented as verified fact.</p></div></li>
+      <li><span>02</span><div><small>SAMPLE</small><h3>Sample-checked</h3><p>Configuration, operation and installation details recorded.</p></div></li>
+      <li><span>03</span><div><small>DOCUMENTS</small><h3>Evidence-reviewed</h3><p>Available reports and certificates matched to model and supplier.</p></div></li>
+      <li><span>04</span><div><small>ORDER</small><h3>Commercially approved</h3><p>Final specification, artwork and batch record confirmed.</p></div></li>
+    </ol>
+  </section>
+
+  <section class="resource-feature section">
+    <div class="resource-heading"><p class="kicker dark"><span></span> Buyer resource center</p><h2>Research before<br />you send the RFQ.</h2><p>Technical guides capture the long-tail questions buyers actually search—and help your team compare supplier answers.</p><a href="/resources/">Browse all resources →</a></div>
+    <div class="resource-stack">
+      <a href="/resources/evaluate-motorcycle-dash-cam-supplier/"><span>BUYER CHECKLIST · 8 MIN</span><h3>How to evaluate a motorcycle dash cam supplier</h3><b>01 ↗</b></a>
+      <a href="/resources/what-motorcycle-camera-ip-ratings-prove/"><span>TECHNICAL GUIDE · 6 MIN</span><h3>What motorcycle camera IP ratings actually prove</h3><b>02 ↗</b></a>
+      <a href="/resources/planning-acc-hardwired-motorcycle-camera-kit/"><span>INSTALLATION GUIDE · 7 MIN</span><h3>Planning an ACC hardwired motorcycle camera kit</h3><b>03 ↗</b></a>
+      <a href="/resources/private-label-without-product-development/"><span>COMMERCIAL GUIDE · 5 MIN</span><h3>Private label without developing new hardware</h3><b>04 ↗</b></a>
+    </div>
+  </section>
+
+  <section class="conversion-split"><a href="/contact/?intent=sample"><small>LOW-RISK START</small><h2>Order a paid sample</h2><p>Validate installation, usability and the actual configuration before volume.</p><span>Plan a sample order ↗</span></a><a href="/contact/?intent=volume"><small>COMMERCIAL RFQ</small><h2>Request volume pricing</h2><p>Share market, quantity and required features for a focused shortlist.</p><span>Start a volume RFQ ↗</span></a></section>
+</BaseLayout>

@@ -1,0 +1,14 @@
+---
+import { getCollection } from 'astro:content';
+interface Props { productId?: string; solutionId?: string; applicationId?: string; requirementId?: string; supportId?: string; comparisonId?: string; }
+const props = Astro.props;
+const resources = (await getCollection('resources', ({ data }) => !data.draft)).filter(({ data }) =>
+  (props.productId && data.relatedProducts.includes(props.productId)) ||
+  (props.solutionId && data.relatedSolutions.includes(props.solutionId)) ||
+  (props.applicationId && data.relatedApplications.includes(props.applicationId)) ||
+  (props.requirementId && data.relatedRequirements.includes(props.requirementId)) ||
+  (props.supportId && data.relatedSupport.includes(props.supportId)) ||
+  (props.comparisonId && data.relatedComparisons.includes(props.comparisonId))
+).slice(0, 3);
+---
+{resources.length > 0 && <section class="related-resources"><header><p class="kicker dark"><span></span> Supporting buyer research</p><h2>Use the evidence behind the decision.</h2></header><div>{resources.map(resource => <a href={`/resources/${resource.id}/`}><small>{resource.data.category} · {resource.data.readingTime}</small><strong>{resource.data.title}</strong><span>Read guide →</span></a>)}</div></section>}

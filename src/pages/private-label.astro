@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+const levels = [
+  ['Level 01','Standard supply','Factory-standard product, packaging and documentation. Best for initial samples and fast market evaluation.'],
+  ['Level 02','Market preparation','English or market-specific inserts, SKU labels, accessory bundles and carton markings where available.'],
+  ['Level 03','Private label','Boot logo, product labels, branded packaging and manuals, each subject to its own MOQ and supplier capability.'],
+  ['Level 04','Configuration project','Cable, bracket, camera or firmware configuration changes considered only when demand and engineering support justify them.'],
+];
+---
+<BaseLayout title="Practical Private Label for Motorcycle Electronics" description="Understand MotoOptix logo, packaging, manual and configuration options without unnecessary custom hardware development.">
+  <section class="page-hero"><p class="kicker dark"><span></span> Build recognition without engineering debt</p><h1>Private-Label Motorcycle Dash Cams<br /><em>& Smart Displays.</em></h1><p>Most distributors need a consistent, supportable product presentation—not a new enclosure, PCB and app. We prioritize the branding work customers can actually see and use.</p></section>
+  <section class="level-grid">{levels.map(level => <article><small>{level[0]}</small><h2>{level[1]}</h2><p>{level[2]}</p></article>)}</section>
+  <section class="split-content"><div><p class="kicker dark"><span></span> Quoted separately</p><h2>One “custom MOQ” is rarely the whole truth.</h2><p>Firmware logos, printed boxes, housing marks and manuals may come from different vendors and production steps. We confirm the MOQ, setup charge and lead time for each requested item.</p></div><div class="check-table"><div><span>Boot logo</span><b>Supplier dependent</b></div><div><span>Product label</span><b>Usually lower MOQ</b></div><div><span>Printed packaging</span><b>Printing MOQ applies</b></div><div><span>Manual / insert</span><b>Language and print scope</b></div><div><span>App branding</span><b>Not assumed available</b></div><div><span>New enclosure / PCB</span><b>Separate development project</b></div></div></section>
+  <section class="detail-cta"><p class="kicker"><span></span> Prepare your brand brief</p><h2>Start with the product.<br />Add only useful identity.</h2><a class="button button-light" href="/contact/">Ask about branding MOQ ↗</a></section>
+</BaseLayout>

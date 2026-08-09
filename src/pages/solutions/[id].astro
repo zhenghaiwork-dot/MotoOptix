@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import RelatedResources from '../../components/RelatedResources.astro';
+import { solutions } from '../../data/site';
+import { getProducts } from '../../lib/products';
+export function getStaticPaths() { return solutions.map(solution => ({ params: { id: solution.id }, props: { solution } })); }
+const { solution } = Astro.props;
+const products = await getProducts();
+const recommended = products.filter(product => solution.recommendedProducts.includes(product.id));
+---
+<BaseLayout title={solution.title} description={solution.summary}>
+  <section class="solution-hero"><div><a class="back-link" href="/solutions/">← All buyer solutions</a><p class="kicker dark"><span></span> {solution.eyebrow}</p><h1>{solution.title}</h1><p>{solution.summary}</p><a class="button" href={`/contact/?solution=${solution.id}`}>{solution.cta} ↗</a></div><aside><small>THE BUYING PROBLEM</small><p>{solution.problem}</p></aside></section>
+  <section class="solution-columns"><div><small>DECISION PRIORITIES</small><ol>{solution.priorities.map((item, i) => <li><span>0{i+1}</span>{item}</li>)}</ol></div><div><small>PROGRAM DELIVERABLES</small><ol>{solution.deliverables.map((item, i) => <li><span>0{i+1}</span>{item}</li>)}</ol></div></section>
+  <section class="recommended"><div><p class="kicker dark"><span></span> Starting platforms</p><h2>Products worth evaluating.</h2><p>These are starting points, not a claim that every feature or market requirement is already satisfied.</p></div><div>{recommended.map(product => <a href={`/products/${product.id}/`}><small>{product.code}</small><h3>{product.name}</h3><span>Review configuration →</span></a>)}</div></section>
+  <section class="truth-panel"><div><span>COMMERCIAL CHECKPOINT</span><h2>A recommended platform remains provisional until sampled.</h2></div><p>Final suitability depends on the selected supplier revision, installation, documentation, destination requirements and commercial terms. The quotation should identify the exact configuration being offered.</p></section>
+  <section class="detail-cta"><p class="kicker"><span></span> Build the buying brief</p><h2>{solution.cta}.</h2><a class="button button-light" href={`/contact/?solution=${solution.id}`}>Start the conversation ↗</a></section>
+  <RelatedResources solutionId={solution.id} />
+</BaseLayout>

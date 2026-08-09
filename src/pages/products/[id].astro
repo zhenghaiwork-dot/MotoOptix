@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getProductEntries, getProducts } from '../../lib/products';
+import { getCollection, render } from 'astro:content';
+import { productSchema } from '../../lib/schema';
+
+export async function getStaticPaths() {
+  const entries = await getProductEntries();
+  return entries.map(entry => ({ params: { id: entry.data.slug }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const product = { id: entry.data.slug, ...entry.data };
+const products = await getProducts();
+const { Content } = await render(entry);
+const relatedProducts = products.filter(item => product.relatedProducts.includes(item.id)).slice(0, 3);
+const relatedResources = (await getCollection('resources', ({ data }) => !data.draft))
+  .filter(({ data }) => data.relatedProducts.includes(product.id))
+  .slice(0, 3);
+const base = Astro.site?.href || Astro.url.origin;
+const crumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Products', url: '/products/' },
+  { name: product.name, url: `/products/${product.id}/` },
+];
+---
+<BaseLayout title={product.seo?.title || product.name} description={product.seo?.description || product.summary} breadcrumbs={crumbs}>
+  {['sample-tested', 'commercially-approved'].includes(product.evidenceStage) && <script is:inline type="application/ld+json" set:html={JSON.stringify(productSchema({ ...product, slug: product.id }, base))}></script>}
+  <section class="product-buy-hero">
+    <div class="product-gallery"><a class="back-link" href="/products/">← All product platforms</a><div class="product-main-image"><img src={`/product-images/${product.id}.webp`} alt={product.name} width="800" height="800" fetchpriority="high" /></div><div class="image-note"><span>REFERENCE IMAGE</span><p>Final appearance and included accessories follow the approved sample configuration.</p></div></div>
+    <div class="product-buy-panel"><p class="product-code">{product.code} · {product.type}</p><h1>{product.name}</h1><p class="product-summary">{product.summary}</p><div class="product-highlights">{product.highlights.map((item) => <span>{item}</span>)}</div>
+      <div class="product-buy-actions"><a class="button button-accent" href={`/contact/?product=${product.id}`}>Get volume pricing <span>↗</span></a><a class="button button-ghost" href={`/contact/?product=${product.id}&intent=sample`}>Request a sample</a></div>
+      <div class="buy-expectations"><div><b>1 business day</b><span>Typical initial response</span></div><div><b>Sample first</b><span>Confirm the exact configuration</span></div><div><b>Volume quote</b><span>Based on quantity and market</span></div></div>
+      <div class="product-fit"><small>BEST FIT FOR</small><ul>{product.idealFor.map((item) => <li>{item}</li>)}</ul></div>
+    </div>
+  </section>
+  <nav class="product-anchor-nav" aria-label="Product page sections"><a href="#product-details">Specifications & options</a><a href="#buyer-checks">Verification</a><a href="#request-quote">Request quote</a><a href="#related">Related</a></nav>
+  <section id="product-details" class="product-procurement">
+    <header class="procurement-intro"><p class="kicker dark"><span></span> Product details</p><h2>Everything needed<br />to shortlist this platform.</h2><p>Use the listed data to narrow the configuration. Items marked as claims or conflicts remain open until the selected sample and matching documents are reviewed.</p></header>
+    <div class="procurement-specs"><div class="procurement-subhead"><small>CORE SPECIFICATIONS</small><span>Evidence status is shown per item</span></div>{product.specifications.slice(0, 8).map((spec) => <div><span>{spec.label}</span><b>{spec.value}</b><small class={`evidence-${spec.status}`}>{spec.status.replace('-', ' ')}</small></div>)}</div>
+    <div class="procurement-configs"><div class="procurement-subhead"><small>AVAILABLE CONFIGURATIONS</small><span>Select a package, then confirm the sample</span></div>{product.configurations.map((config, index) => <article><small>0{index + 1}</small><div><h3>{config.name}</h3><p>{config.description}</p><ul>{config.attributes.map((attribute) => <li>{attribute}</li>)}</ul></div></article>)}</div>
+    <div id="buyer-checks" class="procurement-checks"><article><small>QUOTATION OPTIONS</small><h3>What your RFQ can include</h3><ul>{product.options.map(x => <li>{x}</li>)}</ul></article><article><small>VERIFY BEFORE APPROVAL</small><h3>What still needs confirmation</h3><ul>{product.verification.map(x => <li>{x}</li>)}</ul></article></div>
+    <div class="procurement-notes"><div><small>COMMERCIAL NOTES</small><Content /></div><aside><small>EVIDENCE BOUNDARY · {product.evidenceStage.replace('-', ' ')}</small><h3>No combined “super-product” claims.</h3><p>Supplier-listed data, marketing claims and conflicting values remain visibly separated until the exact sample and documents support them.</p></aside></div>
+  </section>
+  <section id="request-quote" class="product-rfq-band"><div><small>SHORTLIST THIS PLATFORM</small><h2>Tell us your quantity,<br />market and must-have features.</h2><p>We will return a focused configuration, the open verification points and a sample or volume-pricing path.</p></div><div><a class="button button-accent" href={`/contact/?product=${product.id}`}>Request pricing <span>↗</span></a><a href={`/contact/?product=${product.id}&intent=sample`}>Start with 1–3 samples →</a><span>No full customization brief required. Logo and packaging can be discussed only if needed.</span></div></section>
+  <section id="related" class="product-related-compact"><header><p class="kicker dark"><span></span> Continue evaluating</p><h2>Compare nearby options<br />or verify the buying decision.</h2></header><div class="related-compact-grid"><div><small>RELATED HARDWARE</small>{relatedProducts.map(item => <a href={`/products/${item.id}/`}><img src={`/product-images/${item.id}.webp`} alt="" width="96" height="96" loading="lazy" /><span><b>{item.name}</b><em>{item.type} →</em></span></a>)}<a class="related-all" href="/compare/">Compare all product platforms →</a></div>{relatedResources.length > 0 && <div><small>BUYER GUIDES</small>{relatedResources.map(resource => <a href={`/resources/${resource.id}/`}><span><b>{resource.data.title}</b><em>{resource.data.category} · {resource.data.readingTime} →</em></span></a>)}</div>}</div></section>
+</BaseLayout>

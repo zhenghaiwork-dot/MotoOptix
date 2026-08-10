@@ -96,7 +96,7 @@ const socialImage = new URL('/og.png', Astro.site || Astro.url.origin);
         <a href="/about/">About</a>
       </nav>
       <button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-controls="main-nav" aria-expanded="false"><span></span><span></span></button>
-      <a class="button button-small" href="/contact/">Request pricing <span>↗</span></a>
+      <a class="button button-small header-cta" href="/contact/"><span class="header-cta-desktop">Request pricing</span><span class="header-cta-mobile">Get quote</span><span class="header-cta-arrow" aria-hidden="true">↗</span></a>
     </header>
     <main id="main"><slot /></main>
     <footer>
@@ -119,6 +119,7 @@ const socialImage = new URL('/og.png', Astro.site || Astro.url.origin);
         const open = toggle.getAttribute('aria-expanded') === 'true';
         toggle.setAttribute('aria-expanded', String(!open));
         nav?.classList.toggle('nav-open', !open);
+        document.body.classList.toggle('nav-is-open', !open);
       });
       const groups = [...document.querySelectorAll('.nav-group')];
       const supportsHover = window.matchMedia('(hover: hover) and (pointer: fine)');
@@ -146,6 +147,21 @@ const socialImage = new URL('/og.png', Astro.site || Astro.url.origin);
       });
       document.addEventListener('click', event => {
         if (!event.target.closest('.mega-nav')) groups.forEach(group => group.removeAttribute('open'));
+      });
+      nav?.addEventListener('click', event => {
+        if (event.target.closest('a')) {
+          nav.classList.remove('nav-open');
+          toggle?.setAttribute('aria-expanded', 'false');
+          document.body.classList.remove('nav-is-open');
+        }
+      });
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && nav?.classList.contains('nav-open')) {
+          nav.classList.remove('nav-open');
+          toggle?.setAttribute('aria-expanded', 'false');
+          document.body.classList.remove('nav-is-open');
+          toggle?.focus();
+        }
       });
     </script>
   </body>

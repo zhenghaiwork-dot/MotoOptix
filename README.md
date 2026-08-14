@@ -21,7 +21,7 @@ pnpm audit:complete
 
 Copy `.env.example` to `.env` and set:
 
-- `SITE_URL`: an owned production domain; never point canonical URLs to an unowned domain
+- `SITE_URL`: canonical production origin (`https://motooptix.com`)
 - `PUBLIC_RFQ_EMAIL`: business inquiry email
 - `PUBLIC_FORM_ENDPOINT`: HTTPS form receiver; when empty the preview uses `mailto:`
 

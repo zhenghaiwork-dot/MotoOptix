@@ -2,7 +2,7 @@
 
 ## Release gate
 
-1. Set `SITE_URL`, `PUBLIC_RFQ_EMAIL` and `PUBLIC_FORM_ENDPOINT` in the production environment. Never commit secrets.
+1. Confirm `SITE_URL=https://motooptix.com`, `PUBLIC_RFQ_EMAIL=sales@motooptix.com` and the deployment-specific `PUBLIC_FORM_ENDPOINT` in the production environment. Never commit secrets.
 2. Run `pnpm install --frozen-lockfile` and `pnpm run verify`.
 3. Review the generated `dist/robots.txt`, sitemap index, canonical URLs and structured data.
 4. Test the RFQ from a real mobile device. Confirm delivery, source URL, UTM fields, success redirect and failure handling.
@@ -36,4 +36,4 @@ The configured endpoint must enforce same-origin/CORS policy, email and field va
 
 ## Domain cutover
 
-The placeholder domain must not be indexed. When an owned domain is ready, set `SITE_URL`, configure both apex and `www` certificates, redirect `www` to the chosen canonical host, force HTTPS, submit the sitemap, and verify canonical/hreflang output. Do not launch on a domain that is merely expected to expire.
+MotoOptix uses `https://motooptix.com` as the canonical origin. Configure certificates for both apex and `www`, redirect `www.motooptix.com` to `motooptix.com`, force HTTPS, submit `https://motooptix.com/sitemap.xml`, and verify canonical/hreflang output after every production-domain change.

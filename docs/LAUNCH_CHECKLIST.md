@@ -33,7 +33,7 @@ The Astro site is complete as a verified pre-launch build. The following items r
 
 ## Production SEO and operations
 
-- [ ] Configure `SITE_URL` with the owned HTTPS domain
+- [ ] Confirm `SITE_URL=https://motooptix.com` in the production environment
 - [ ] Verify canonical URLs, `robots.txt` and sitemap on production
 - [ ] Create Google Search Console and Bing Webmaster Tools properties
 - [ ] Submit the production sitemap
